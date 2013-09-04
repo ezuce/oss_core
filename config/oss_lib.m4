@@ -196,21 +196,28 @@ AC_DEFUN([SFAC_LIB_CORE_FLAGS],
     AC_CHECK_LIB([event_pthreads], [main], [], libevent_thread_found=no)
 
     AM_CONDITIONAL([ENABLE_TURN], false)
-    #if test "x$libevent_thread" = "xno" -a "x$libevent_thread" = "xno"; then
-    #    echo "libevent 2 not found.  Disabling TURN compilation"
-    #else
-    #    if test "x$libevent_thread_found" = "xno" -a "x$libevent_thread_found" = "xno"; then
-    #        echo "libevent 2 not found.  Disabling TURN compilation"
-    #    else
-    #        if test "x$libevent_ssl_found" = "xno" -a "x$libevent_ssl_found" = "xno"; then
-    #           echo "libevent 2 not found.  Disabling TURN compilation"
-    #        else
-    #           echo "TURN compilation enabled"
-    #           AM_CONDITIONAL([ENABLE_TURN], true)
-    #           AC_DEFINE([ENABLE_TURN], [1], [Flags TURN compilation due to the presence of libevent 2])
-    #        fi
-    #    fi
-    #fi
+
+    AC_ARG_ENABLE(turn,
+      AC_HELP_STRING([--enable-turn], [Build TURN Server]),
+      enable_turn=yes)
+
+    if test "x$enable_turn" == "xyes"; then
+        if test "x$libevent_thread" = "xno" -a "x$libevent_thread" = "xno"; then
+            echo "libevent 2 not found.  Disabling TURN compilation"
+        else
+            if test "x$libevent_thread_found" = "xno" -a "x$libevent_thread_found" = "xno"; then
+                echo "libevent 2 not found.  Disabling TURN compilation"
+            else
+                if test "x$libevent_ssl_found" = "xno" -a "x$libevent_ssl_found" = "xno"; then
+                   echo "libevent 2 not found.  Disabling TURN compilation"
+                else
+                   echo "TURN compilation enabled"
+                   AM_CONDITIONAL([ENABLE_TURN], true)
+                   AC_DEFINE([ENABLE_TURN], [1], [Flags TURN compilation due to the presence of libevent 2])
+                fi
+            fi
+        fi
+    fi
 
     AC_SUBST(OSS_CORE_DEP_LIBS, "$BOOST_LIBS $POCO_LIBS $OSS_CORE_DEP_LIBS")
 
@@ -218,18 +225,6 @@ AC_DEFUN([SFAC_LIB_CORE_FLAGS],
 
 AC_DEFUN([SFAC_LIB_CORE],
 [
-    SFAC_ARG_WITH_INCLUDE([OSS/Core.h],
-            [osscoreinc],
-            [ --with-osscoreinc=<dir> portability include path ],
-            [oss_coreLib])
-
-    if test x_$foundpath != x_; then
-        AC_MSG_RESULT($foundpath)
-        OSSLIBSCOREINC=$foundpath
-        CFLAGS="-I$OSSLIBSCOREINC $CFLAGS"
-        CXXFLAGS="-I$OSSLIBSCOREINC $CXXFLAGS"
-    fi
-    
     foundpath=""
 
     SFAC_ARG_WITH_INCLUDE([OSS/Core.h],
@@ -278,19 +273,25 @@ AC_DEFUN([SFAC_LIB_CORE],
     fi
     AC_SUBST(LIB_OSS_CARP_LA, "$foundpath/liboss_carp.la")
 
-    foundpath=""
-    SFAC_ARG_WITH_LIB([liboss_turn.la],
-            [ossturnlib],
-            [ --with-ossturnlib=<dir> turn library path ],
-            [oss_turnLib])
+    AC_ARG_ENABLE(turn,
+      AC_HELP_STRING([--enable-turn], [Build TURN Server]),
+      enable_turn=yes)
 
-    if test x_$foundpath != x_; then
-        AC_MSG_RESULT($foundpath)
-    else
-        AC_MSG_WARN([    assuming it will be in '${prefix}/lib'])
-        foundpath=${prefix}/lib
+    if test "x$enable_turn" == "xyes"; then
+        foundpath=""
+        SFAC_ARG_WITH_LIB([liboss_turn.la],
+                [ossturnlib],
+                [ --with-ossturnlib=<dir> turn library path ],
+                [oss_turnLib])
+
+        if test x_$foundpath != x_; then
+            AC_MSG_RESULT($foundpath)
+        else
+            AC_MSG_WARN([    assuming it will be in '${prefix}/lib'])
+            foundpath=${prefix}/lib
+        fi
+        AC_SUBST(LIB_OSS_TURN_LA, "$foundpath/liboss_turn.la")
     fi
-    AC_SUBST(LIB_OSS_TURN_LA, "$foundpath/liboss_turn.la")
 
     AC_REQUIRE([SFAC_LIB_CORE_FLAGS])
 
