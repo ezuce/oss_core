@@ -132,7 +132,11 @@ mv %{_builddir}/%name-%version/%name-rpmlintrc %{_sourcedir}
 
 %build
 autoreconf -if
+%if 0%{?fedora} >= 16
+%configure @OSSLIBS_RPM_CONFIGURE_OPTIONS@ --enable-turn
+%else
 %configure @OSSLIBS_RPM_CONFIGURE_OPTIONS@
+%endif
 cp config.log %name.configlog
 make %{_smp_mflags} all
 
