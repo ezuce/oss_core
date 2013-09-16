@@ -52,6 +52,11 @@
 #ifndef OSS_SIPWEBSOCKETCONNECTION_H_INCLUDED
 #define	OSS_SIPWEBSOCKETCONNECTION_H_INCLUDED
 
+//
+// Undefine VERSION.  websocket++ uses this in an enum.
+//
+#undef VERSION
+
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/shared_ptr.hpp>
