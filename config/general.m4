@@ -181,7 +181,7 @@ AC_DEFUN([CHECK_SSL],
         fi
     done
     if test x_$found_ssl_inc != x_yes ; then
-        AC_MSG_ERROR(['openssl/ssl.h' not found; tried ${tried_path}])
+        SF_MISSING_DEP(['openssl/ssl.h' not found; tried ${tried_path}])
     else
         AC_MSG_RESULT($sslincdir)
         HAVE_SSL=yes
@@ -222,7 +222,7 @@ AC_DEFUN([CHECK_SSL],
     done
 
     if test x_$found_ssl_lib != x_yes ; then
-        AC_MSG_ERROR(['libssl.so' not found; tried $openssl_path, each with lib, lib/openssl, and lib/ssl])
+        SF_MISSING_DEP(['libssl.so' not found; tried $openssl_path, each with lib, lib/openssl, and lib/ssl])
     else
         AC_MSG_RESULT($ssllibdir)
        if test x_"`uname -s`" = x_SunOS ; then
