@@ -103,6 +103,7 @@ Group: Development/Libraries
 Vendor: OSS Software Solutions
 Summary: Header files for %name
 
+Requires: libevent-devel
 
 %description devel
 This library provides a set of classes that provide an operating
