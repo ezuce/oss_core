@@ -69,6 +69,10 @@ Requires: hiredis
 BuildRequires: gtest-devel
 Requires: gtest
 
+# NOTE: If you add -devel package consider adding it to
+# oss_core-devel - Requires so packages building against oss_core do not
+# have to respecify list
+
 Source: %name-%version.tar.gz
 
 Prefix: %_prefix
@@ -103,7 +107,21 @@ Group: Development/Libraries
 Vendor: OSS Software Solutions
 Summary: Header files for %name
 
+Requires: openssl-devel
+Requires: libmcrypt-devel
+Requires: libtool-ltdl-devel
+Requires: pcre-devel
+Requires: db4-devel
 Requires: libevent-devel
+Requires: boost-devel
+Requires: v8-devel
+Requires: libpcap-devel
+Requires: libdnet-devel
+Requires: xmlrpc-c-devel
+Requires: poco-devel
+Requires: libconfig-devel
+Requires: hiredis-devel
+Requires: gtest-devel
 
 %description devel
 This library provides a set of classes that provide an operating
