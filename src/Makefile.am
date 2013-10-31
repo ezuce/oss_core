@@ -193,6 +193,7 @@ liboss_core_la_SOURCES =  \
     exec/Command.cpp \
     exec/Process.cpp \
     exec/ManagedDaemon.cpp \
+    exec/ManagedDaemonRunner.cpp \
     exec/stringtoargcargv.cpp \
     abnf/ABNFSIPURIParameter.cpp \
     abnf/ABNFSIPScheme.cpp \
